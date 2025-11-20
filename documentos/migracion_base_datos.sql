@@ -1,11 +1,8 @@
---
--- PostgreSQL database dump
---
+
 
 \restrict LOc7RPZfgi8eTnloM5B9ltCvJFqUIt4uPj8USIMLWsCCp5qd6dgQK4YfartGZp9
 
--- Dumped from database version 16.10 (Homebrew)
--- Dumped by pg_dump version 18.0
+
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,16 +16,11 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
---
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 
 
---
--- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
---
+
 
 COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
 
@@ -37,9 +29,7 @@ SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
---
--- Name: roles; Type: TABLE; Schema: public; Owner: postgres
---
+
 
 CREATE TABLE public.roles (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
@@ -51,9 +41,7 @@ CREATE TABLE public.roles (
 
 ALTER TABLE public.roles OWNER TO postgres;
 
---
--- Name: user_roles; Type: TABLE; Schema: public; Owner: postgres
---
+
 
 CREATE TABLE public.user_roles (
     user_id uuid NOT NULL,
@@ -63,9 +51,7 @@ CREATE TABLE public.user_roles (
 
 ALTER TABLE public.user_roles OWNER TO postgres;
 
---
--- Name: users; Type: TABLE; Schema: public; Owner: postgres
---
+
 
 CREATE TABLE public.users (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
@@ -80,9 +66,7 @@ CREATE TABLE public.users (
 
 ALTER TABLE public.users OWNER TO postgres;
 
---
--- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: postgres
---
+
 
 COPY public.roles (id, role_name, description, created_at) FROM stdin;
 a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d	admin	Administrador del sistema con acceso completo	2025-11-20 10:09:04.113402
@@ -91,9 +75,7 @@ c3d4e5f6-a7b8-6c7d-0e1f-2a3b4c5d6e7f	moderator	Moderador con permisos intermedio
 \.
 
 
---
--- Data for Name: user_roles; Type: TABLE DATA; Schema: public; Owner: postgres
---
+
 
 COPY public.user_roles (user_id, role_id) FROM stdin;
 d4e5f6a7-b8c9-7d8e-1f2a-3b4c5d6e7f8a	a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d
@@ -109,9 +91,7 @@ e1f2a3b4-c5d6-4e5f-8a9b-0c1d2e3f4a5b	b2c3d4e5-f6a7-5b6c-9d0e-1f2a3b4c5d6e
 \.
 
 
---
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
---
+
 
 COPY public.users (id, email, password, name, phone, is_active, created_at) FROM stdin;
 d4e5f6a7-b8c9-7d8e-1f2a-3b4c5d6e7f8a	admin@sistema.com	$2b$10$ZQXYvz8g8YqZJZw5qY5qY.K5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y	Carlos Administrador	+57 300 111 2233	t	2025-11-20 10:09:04.118507
@@ -125,79 +105,57 @@ e1f2a3b4-c5d6-4e5f-8a9b-0c1d2e3f4a5b	sofia@sistema.com	$2b$10$ZQXYvz8g8YqZJZw5qY
 \.
 
 
---
--- Name: user_roles PK_23ed6f04fe43066df08379fd034; Type: CONSTRAINT; Schema: public; Owner: postgres
---
+
 
 ALTER TABLE ONLY public.user_roles
     ADD CONSTRAINT "PK_23ed6f04fe43066df08379fd034" PRIMARY KEY (user_id, role_id);
 
 
---
--- Name: users PK_a3ffb1c0c8416b9fc6f907b7433; Type: CONSTRAINT; Schema: public; Owner: postgres
---
+
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY (id);
 
 
---
--- Name: roles PK_c1433d71a4838793a49dcad46ab; Type: CONSTRAINT; Schema: public; Owner: postgres
---
 
 ALTER TABLE ONLY public.roles
     ADD CONSTRAINT "PK_c1433d71a4838793a49dcad46ab" PRIMARY KEY (id);
 
 
---
--- Name: users UQ_97672ac88f789774dd47f7c8be3; Type: CONSTRAINT; Schema: public; Owner: postgres
---
+
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE (email);
 
 
---
--- Name: roles UQ_ac35f51a0f17e3e1fe121126039; Type: CONSTRAINT; Schema: public; Owner: postgres
---
+
 
 ALTER TABLE ONLY public.roles
     ADD CONSTRAINT "UQ_ac35f51a0f17e3e1fe121126039" UNIQUE (role_name);
 
 
---
--- Name: IDX_87b8888186ca9769c960e92687; Type: INDEX; Schema: public; Owner: postgres
---
+
 
 CREATE INDEX "IDX_87b8888186ca9769c960e92687" ON public.user_roles USING btree (user_id);
 
 
---
--- Name: IDX_b23c65e50a758245a33ee35fda; Type: INDEX; Schema: public; Owner: postgres
---
+
 
 CREATE INDEX "IDX_b23c65e50a758245a33ee35fda" ON public.user_roles USING btree (role_id);
 
 
---
--- Name: user_roles FK_87b8888186ca9769c960e926870; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
 
 ALTER TABLE ONLY public.user_roles
     ADD CONSTRAINT "FK_87b8888186ca9769c960e926870" FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
---
--- Name: user_roles FK_b23c65e50a758245a33ee35fda1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
+
 
 ALTER TABLE ONLY public.user_roles
     ADD CONSTRAINT "FK_b23c65e50a758245a33ee35fda1" FOREIGN KEY (role_id) REFERENCES public.roles(id);
 
 
---
--- PostgreSQL database dump complete
---
+
 
 \unrestrict LOc7RPZfgi8eTnloM5B9ltCvJFqUIt4uPj8USIMLWsCCp5qd6dgQK4YfartGZp9
 
