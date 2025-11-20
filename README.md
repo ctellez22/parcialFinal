@@ -1,32 +1,110 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Sistema de Usuarios y Roles con NestJS
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Sistema de autenticación y autorización con JWT, TypeORM y PostgreSQL.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Características
 
-## Description
+- Autenticación JWT con Passport
+- Autorización por roles
+- Guards y decoradores personalizados
+- Endpoints protegidos
+- Validaciones con class-validator
+- Hash de contraseñas con bcrypt
+- Base de datos PostgreSQL
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Instalación
 
-## Project setup
+```bash
+npm install
+```
+
+## Configuración
+
+Crear archivo `.env`:
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_DATABASE=parcialfinal
+JWT_SECRET=mi-clave-secreta-jwt-2025
+PORT=3000
+```
+
+## Iniciar
+
+```bash
+# Desarrollo
+npm run start:dev
+
+# Producción
+npm run build
+npm run start:prod
+```
+
+## Base de Datos
+
+Crear base de datos:
+```sql
+CREATE DATABASE parcialfinal;
+```
+
+Inicializar roles:
+```bash
+psql -U postgres -d parcialfinal -f init-roles.sql
+```
+
+## API
+
+### Autenticación (público)
+- `POST /auth/register` - Registro
+- `POST /auth/login` - Login
+
+### Usuarios (protegido)
+- `POST /users` - Crear (admin)
+- `GET /users` - Listar (admin, user)
+- `GET /users/:id` - Ver (admin, user)
+- `PATCH /users/:id` - Actualizar (admin)
+- `DELETE /users/:id` - Eliminar (admin)
+
+### Roles (protegido)
+- `POST /roles` - Crear (admin)
+- `GET /roles` - Listar (admin, user)
+- `GET /roles/:id` - Ver (admin, user)
+- `PATCH /roles/:id` - Actualizar (admin)
+- `DELETE /roles/:id` - Eliminar (admin)
+
+## Uso
+
+Registro:
+```bash
+curl -X POST http://localhost:3000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@test.com","password":"123456","name":"Test"}'
+```
+
+Login:
+```bash
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@test.com","password":"123456"}'
+```
+
+Usar token:
+```bash
+curl http://localhost:3000/users \
+  -H "Authorization: Bearer <token>"
+```
+
+## Tecnologías
+
+- NestJS
+- TypeScript
+- TypeORM
+- PostgreSQL
+- Passport JWT
+- bcrypt
+
 
 ```bash
 $ npm install

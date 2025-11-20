@@ -13,16 +13,16 @@ export class RolesService {
   ) {}
 
   async create(createRoleDto: CreateRoleDto): Promise<Role> {
-    const existingRole = await this.roleRepository.findOne({
+    const rolExistente = await this.roleRepository.findOne({
       where: { role_name: createRoleDto.role_name },
     });
 
-    if (existingRole) {
+    if (rolExistente) {
       throw new ConflictException('El nombre del rol ya existe');
     }
 
-    const role = this.roleRepository.create(createRoleDto);
-    return await this.roleRepository.save(role);
+    const nuevoRol = this.roleRepository.create(createRoleDto);
+    return await this.roleRepository.save(nuevoRol);
   }
 
   async findAll(): Promise<Role[]> {
@@ -30,24 +30,24 @@ export class RolesService {
   }
 
   async findOne(id: string): Promise<Role> {
-    const role = await this.roleRepository.findOne({ where: { id } });
+    const rol = await this.roleRepository.findOne({ where: { id } });
 
-    if (!role) {
+    if (!rol) {
       throw new NotFoundException(`Rol con ID ${id} no encontrado`);
     }
 
-    return role;
+    return rol;
   }
 
   async update(id: string, updateRoleDto: UpdateRoleDto): Promise<Role> {
-    const role = await this.findOne(id);
+    const rol = await this.findOne(id);
 
-    if (updateRoleDto.role_name && updateRoleDto.role_name !== role.role_name) {
-      const existingRole = await this.roleRepository.findOne({
+    if (updateRoleDto.role_name && updateRoleDto.role_name !== rol.role_name) {
+      const nombreDuplicado = await this.roleRepository.findOne({
         where: { role_name: updateRoleDto.role_name },
       });
 
-      if (existingRole) {
+      if (nombreDuplicado) {
         throw new ConflictException('El nombre del rol ya existe');
       }
     }
@@ -57,7 +57,7 @@ export class RolesService {
   }
 
   async remove(id: string): Promise<void> {
-    const role = await this.findOne(id);
-    await this.roleRepository.remove(role);
+    const rol = await this.findOne(id);
+    await this.roleRepository.remove(rol);
   }
 }

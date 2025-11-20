@@ -14,22 +14,22 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const existingUser = await this.userRepository.findOne({
+    const usuarioExistente = await this.userRepository.findOne({
       where: { email: createUserDto.email },
     });
 
-    if (existingUser) {
+    if (usuarioExistente) {
       throw new ConflictException('El email ya está registrado');
     }
 
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    const passwordEncriptado = await bcrypt.hash(createUserDto.password, 10);
 
-    const user = this.userRepository.create({
+    const usuario = this.userRepository.create({
       ...createUserDto,
-      password: hashedPassword,
+      password: passwordEncriptado,
     });
 
-    return await this.userRepository.save(user);
+    return await this.userRepository.save(usuario);
   }
 
   async findAll(): Promise<User[]> {
@@ -39,27 +39,27 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({
+    const usuario = await this.userRepository.findOne({
       where: { id },
       select: ['id', 'email', 'name', 'phone', 'is_active', 'created_at'],
     });
 
-    if (!user) {
+    if (!usuario) {
       throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
     }
 
-    return user;
+    return usuario;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    const user = await this.findOne(id);
+    const usuario = await this.findOne(id);
 
-    if (updateUserDto.email && updateUserDto.email !== user.email) {
-      const existingUser = await this.userRepository.findOne({
+    if (updateUserDto.email && updateUserDto.email !== usuario.email) {
+      const emailDuplicado = await this.userRepository.findOne({
         where: { email: updateUserDto.email },
       });
 
-      if (existingUser) {
+      if (emailDuplicado) {
         throw new ConflictException('El email ya está registrado');
       }
     }
@@ -74,7 +74,7 @@ export class UsersService {
   }
 
   async remove(id: string): Promise<void> {
-    const user = await this.findOne(id);
-    await this.userRepository.remove(user);
+    const usuario = await this.findOne(id);
+    await this.userRepository.remove(usuario);
   }
 }
