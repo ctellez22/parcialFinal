@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity';
+import { Appintment } from 'src/appintments/entities/appintment.entity';
 
 @Entity('users')
 export class User {
@@ -23,6 +24,9 @@ export class User {
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
+
+  @OneToMany(() => Appintment, (appintment) => appintment.user)
+  appintments: Appintment[];
 
   @ManyToMany(() => Role, (role) => role.users)
   @JoinTable({
